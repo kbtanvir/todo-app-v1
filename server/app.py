@@ -148,12 +148,69 @@ def add_todo():
 
 @app.route('/todos/<id>', methods=['GET'])
 def get_todo(id):
+    """
+    Get one by ID
+    ---
+    tags:
+      - Todos
+    parameters:
+      - name: id
+        in: path
+        type: integer
+        required: true
+        description: The ID of the todo item
+    responses:
+      200:
+        description: A single todo item
+        schema:
+          $ref: '#/definitions/Todo'
+      404:
+        description: Todo not found
+    """
     todo = Todo.query.get(id)
     return todo_schema.jsonify(todo)
 
 
 @app.route('/todos/<id>', methods=['PUT'])
 def update_todo(id):
+    """
+    Update a todo by ID
+    ---
+    tags:
+      - Todos
+    parameters:
+      - name: id
+        in: path
+        type: integer
+        required: true
+        description: The ID of the todo item
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          required:
+            - title
+            - description
+            - completed
+          properties:
+            title:
+              type: string
+              example: "Updated Todo"
+            description:
+              type: string
+              example: "Updated description"
+            completed:
+              type: boolean
+              example: true
+    responses:
+      200:
+        description: Todo item updated
+        schema:
+          $ref: '#/definitions/Todo'
+      404:
+        description: Todo not found
+    """
     todo = Todo.query.get(id)
 
     title = request.json['title']
@@ -171,6 +228,25 @@ def update_todo(id):
 
 @app.route('/todos/<id>', methods=['DELETE'])
 def delete_todo(id):
+    """
+    Delete a todo by ID
+    ---
+    tags:
+      - Todos
+    parameters:
+      - name: id
+        in: path
+        type: integer
+        required: true
+        description: The ID of the todo item
+    responses:
+      200:
+        description: Todo item deleted
+        schema:
+          $ref: '#/definitions/Todo'
+      404:
+        description: Todo not found
+    """
     todo = Todo.query.get(id)
     db.session.delete(todo)
     db.session.commit()
