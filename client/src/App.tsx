@@ -28,7 +28,6 @@ interface TodoItem extends Todo {
 }
 
 export default function App() {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [todos, setTodos] = useState<TodoItem[]>([
     {
       "title": "Go to school",
@@ -52,6 +51,8 @@ export default function App() {
       "completed": true,
     },
   ]);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [currentTodo, setCurrentTodo] = useState<TodoItem | null>(null);
 
   const {
     register,
@@ -63,8 +64,23 @@ export default function App() {
   });
 
   const onSubmit: SubmitHandler<Todo> = data => {
-    setTodos([...todos, { ...data, id: Date.now() }]);
+    if (isEditing) {
+      setTodos(
+        todos.map(todo =>
+          todo.id === currentTodo?.id ? { ...data, id: currentTodo.id } : todo
+        )
+      );
+      setIsEditing(false);
+      setCurrentTodo(null);
+    } else {
+      setTodos([...todos, { ...data, id: Date.now() }]);
+    }
     reset({ title: "", description: "", completed: false });
+  };
+  const handleEditTodo = (todo: TodoItem) => {
+    setCurrentTodo(todo);
+    reset(todo);
+    setIsEditing(true);
   };
 
   return (
@@ -143,7 +159,10 @@ export default function App() {
               </div>
             </div>
             <div>
-              <button className="bg-yellow-500 text-white px-4 py-2 rounded-md mr-2">
+              <button
+                onClick={() => handleEditTodo(todo)}
+                className="bg-yellow-500 text-white px-4 py-2 rounded-md mr-2"
+              >
                 Edit
               </button>
               <button className="bg-red-500 text-white px-4 py-2 rounded-md">
