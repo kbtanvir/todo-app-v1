@@ -1,8 +1,8 @@
+from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask import Flask, jsonify
 from sqlalchemy.orm import DeclarativeBase
 from flask_sqlalchemy import SQLAlchemy
-
 
 app = Flask(__name__)
 
@@ -16,6 +16,7 @@ class Base(DeclarativeBase):
 
 
 db = SQLAlchemy(model_class=Base)
+ma = Marshmallow(app)
 
 
 class Todo(db.Model):
@@ -25,6 +26,14 @@ class Todo(db.Model):
     completed = db.Column(db.Boolean, default=False)
 
 
+class TodoSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Todo
+
+
+todo_schema = TodoSchema()
+todos_schema = TodoSchema(many=True)
+
 db.init_app(app)
 
 migrate = Migrate(app, db)
@@ -33,6 +42,15 @@ migrate = Migrate(app, db)
 @app.route("/")
 def helloWorld():
     return jsonify("Hello, cross-origin-world!")
+
+
+@app.route('/todos', methods=['GET'])
+def get_todos():
+    data = Todo.query.all()
+
+    result = todos_schema.dump(data)
+
+    return jsonify(result)
 
 
 if __name__ == '__main__':
