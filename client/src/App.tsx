@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 /* 
@@ -62,6 +62,25 @@ export default function App() {
   } = useForm<Todo>({
     resolver: zodResolver(todoSchema),
   });
+  const fetchTodos = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/todos", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log(data)
+      setTodos(data);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
 
   const onSubmit: SubmitHandler<Todo> = data => {
     if (isEditing) {
@@ -85,6 +104,10 @@ export default function App() {
   const handleDeleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   return (
     <div className="container mx-auto p-4">
