@@ -1,5 +1,5 @@
 CLIENT
-
+---------
 - install vite react app with tailwind css 
 - add zod to create schema
 - create UI
@@ -7,6 +7,9 @@ CLIENT
 - and hook form for validation
 - connect handlers with APIs
 - test
+
+Todo
+-----
 - move hanlders to state manager
 - add react query for request state handling
 - add loaders 
@@ -14,8 +17,31 @@ CLIENT
 - split code
 - add icons
 - add transitions effects
+- add secrets in env file, add env in git ignore
+- deploy to vercel
+
 
 SERVER
+--------
+- install dependencies from requirements.txt
+- create basic flask app to expose root route
+- add sqlalchemy, marshmallow, flask migration and initialize
+- add model
+- initialize db
+- add app context in main definition 
+- check if instance and migration files are created 
+- api routes
+- add swagger for testing apis
+- test
+- add cors within app context
 
-- add validations to prevent unwanted requests
+Todo
+-----
+- update cors policy to accept vercel url
+- add secrets to env file
+- add validations to api routes
 - split code
+- dockerize and test
+- push to google cloud artifact
+- start cloud run instance
+- collect and update server URL in client app
