@@ -2,16 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-/* 
-- add zod to create schema
-- create UI
-- add handlers and test in local state
-- and hook form for validation
-- connect handlers with APIs
-- test
-- move hanlders to state manager
-- add react query for request state handling
-*/
 
 // Define the schema using Zod
 

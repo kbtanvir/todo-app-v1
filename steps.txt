@@ -1,0 +1,21 @@
+CLIENT
+
+- install vite react app with tailwind css 
+- add zod to create schema
+- create UI
+- add handlers and test with demo data in local state
+- and hook form for validation
+- connect handlers with APIs
+- test
+- move hanlders to state manager
+- add react query for request state handling
+- add loaders 
+- make ui responsive
+- split code
+- add icons
+- add transitions effects
+
+SERVER
+
+- add validations to prevent unwanted requests
+- split code
