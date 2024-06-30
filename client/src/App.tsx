@@ -62,47 +62,70 @@ export default function App() {
   } = useForm<Todo>({
     resolver: zodResolver(todoSchema),
   });
+
+  const onSubmit: SubmitHandler<Todo> = data => {
+    if (isEditing) {
+      updateTodo(currentTodo!.id, data);
+      setIsEditing(false);
+      setCurrentTodo(null);
+    } else {
+      addTodo(data);
+    }
+    reset({ title: "", description: "", completed: false });
+  };
+
   const fetchTodos = async () => {
     try {
       const response = await fetch("http://127.0.0.1:5000/todos", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // "Access-Control-Allow-Origin": "*",
         },
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data)
       setTodos(data);
     } catch (error) {
       console.error("Fetch error:", error);
     }
   };
-
-  const onSubmit: SubmitHandler<Todo> = data => {
-    if (isEditing) {
-      setTodos(
-        todos.map(todo =>
-          todo.id === currentTodo?.id ? { ...data, id: currentTodo.id } : todo
-        )
-      );
-      setIsEditing(false);
-      setCurrentTodo(null);
-    } else {
-      setTodos([...todos, { ...data, id: Date.now() }]);
-    }
-    reset({ title: "", description: "", completed: false });
+  const addTodo = async (todo: Todo) => {
+    await fetch("http://127.0.0.1:5000/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    });
+    fetchTodos();
   };
+  const updateTodo = async (id: number, todo: Todo) => {
+    await fetch(`http://127.0.0.1:5000/todos/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    });
+    fetchTodos();
+  };
+
+  const deleteTodo = async (id: number) => {
+    await fetch(`http://127.0.0.1:5000/todos/${id}`, {
+      method: "DELETE",
+    });
+    fetchTodos();
+  };
+
   const handleEditTodo = (todo: TodoItem) => {
     setCurrentTodo(todo);
     reset(todo);
     setIsEditing(true);
   };
   const handleDeleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    deleteTodo(id);
   };
 
   useEffect(() => {
