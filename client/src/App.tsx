@@ -82,6 +82,9 @@ export default function App() {
     reset(todo);
     setIsEditing(true);
   };
+  const handleDeleteTodo = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -165,7 +168,10 @@ export default function App() {
               >
                 Edit
               </button>
-              <button className="bg-red-500 text-white px-4 py-2 rounded-md">
+              <button
+                onClick={() => handleDeleteTodo(todo.id)}
+                className="bg-red-500 text-white px-4 py-2 rounded-md"
+              >
                 Delete
               </button>
             </div>
