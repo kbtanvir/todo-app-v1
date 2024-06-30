@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask import Flask, jsonify, request
 from sqlalchemy.orm import DeclarativeBase
 from flask_sqlalchemy import SQLAlchemy
-
+from flasgger import Swagger
 
 app = Flask(__name__)
 
@@ -18,8 +18,11 @@ class Base(DeclarativeBase):
     pass
 
 
+# Initialize utilization tools
+
 db = SQLAlchemy(model_class=Base)
 ma = Marshmallow(app)
+swagger = Swagger(app)
 
 
 # MODEL config
@@ -44,7 +47,6 @@ todo_schema = TodoSchema()
 todos_schema = TodoSchema(many=True)
 
 db.init_app(app)  # implements sqlite db file
-
 migrate = Migrate(app, db)  # implements migration files
 
 
@@ -58,6 +60,31 @@ def helloWorld():
 
 @app.route('/todos', methods=['GET'])
 def get_todos():
+    """
+    Get all todos
+    ---
+    tags:
+      - Todos
+    responses:
+      200:
+        description: List of todo items
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/Todo'
+    definitions:
+      Todo:
+        type: object
+        properties:
+          id:
+            type: integer
+          title:
+            type: string
+          description:
+            type: string
+          completed:
+            type: boolean
+    """
     data = Todo.query.all()
 
     result = todos_schema.dump(data)
