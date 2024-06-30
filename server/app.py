@@ -94,11 +94,51 @@ def get_todos():
 
 @app.route('/todos', methods=['POST'])
 def add_todo():
+    """
+    Add a new todo
+    ---
+    tags:
+      - Todos
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          required:
+            - title
+            - description
+            - completed
+          properties:
+            title:
+              type: string
+              example: "New Todo"
+            description:
+              type: string
+              example: "Description of the new todo"
+            completed:
+              type: boolean
+              example: false
+    responses:
+      200:
+        description: Todo item added
+        schema:
+          id: Todo
+          properties:
+            id:
+              type: integer
+            title:
+              type: string
+            description:
+              type: string
+            completed:
+              type: boolean
+    """
     title = request.json['title']
     description = request.json['description']
     completed = request.json['completed']
 
-    new_todo = Todo(title=title, description=description, complete=completed)
+    new_todo = Todo(title=title, description=description, completed=completed)
 
     db.session.add(new_todo)
     db.session.commit()
