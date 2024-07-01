@@ -25,10 +25,11 @@ Ensure your directory structure looks like this:
 todo-app/
 ├── client/
 │   ├── Dockerfile
-│   └── (other client app files)
+│   ├── src
+         └── App.tsx
 ├── server/
 │   ├── Dockerfile
-│   └── (other server app files)
+│   └── app.py
 └── docker-compose.yml
 ```
 
