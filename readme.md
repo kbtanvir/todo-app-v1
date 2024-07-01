@@ -1,9 +1,4 @@
-README.md
-markdown
-Copy code
-# Todo App
-
-This is a simple Todo application built with React (client) and Flask (server) using Docker Compose.
+ 
 
 ## Installation
 

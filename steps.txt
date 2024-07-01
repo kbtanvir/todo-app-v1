@@ -14,7 +14,6 @@ CLIENT
 
 Todo
 -----
-- add loaders
 - add secrets in env file, add env in git ignore
 - split code
 - deploy to vercel
@@ -33,14 +32,14 @@ SERVER
 - add swagger for testing apis
 - test
 - add cors within app context
-
-Todo
------
 - update cors policy to accept vercel url
 - add secrets to env file
 - add validations to api routes
-- split code
 - dockerize and test
-- push to google cloud artifact
+
+Todo
+-----
+- split code
 - start cloud run instance
 - collect and update server URL in client app
+- push to google cloud artifact

@@ -92,7 +92,7 @@ function SingleItemForm() {
   function onSubmit(data: Todo) {
     todoService.updateTodo(data);
 
-    return form.reset();
+    return form.reset(defaultValues);
   }
 
   useEffect(() => {
@@ -102,7 +102,7 @@ function SingleItemForm() {
 
     form.reset(item);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(item)]);
+  }, [JSON.stringify(item), editingId]);
 
   useEffect(() => {
     if (!editingId) {

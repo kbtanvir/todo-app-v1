@@ -73,6 +73,18 @@ def get_todos():
           type: array
           items:
             $ref: '#/definitions/Todo'
+    definitions:
+      Todo:
+        type: object
+        properties:
+          id:
+            type: integer
+          title:
+            type: string
+          description:
+            type: string
+          completed:
+            type: boolean
     """
     data = Todo.query.all()
     result = todos_schema.dump(data)
@@ -110,7 +122,16 @@ def add_todo():
       200:
         description: Todo item added
         schema:
-          $ref: '#/definitions/Todo'
+          id: Todo
+          properties:
+            id:
+              type: integer
+            title:
+              type: string
+            description:
+              type: string
+            completed:
+              type: boolean
     """
     try:
         title = request.json.get('title')
@@ -133,7 +154,7 @@ def add_todo():
 @app.route('/todos/<int:id>', methods=['GET'])
 def get_todo(id):
     """
-    Get a todo by ID
+    Get one by ID
     ---
     tags:
       - Todos
