@@ -31,14 +31,14 @@ export class TodoService {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      const data = await response.json();
 
-      return data;
+      return await response.json();
     } catch (error) {
       console.error("Fetch error:", error);
     }
   }
   async fetchTodos() {
+    provider.setEditingId(undefined);
     try {
       const response = await fetch("http://127.0.0.1:5000/todos", {
         method: "GET",
@@ -50,7 +50,6 @@ export class TodoService {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-
       provider.setList(data);
     } catch (error) {
       console.error("Fetch error:", error);
@@ -81,8 +80,6 @@ export class TodoService {
     } else {
       await this.addTodo(todo);
     }
-
-    provider.setEditingId(undefined);
 
     this.fetchTodos();
   }

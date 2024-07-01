@@ -79,6 +79,8 @@ function SingleItemForm() {
 
   function onSubmit(data: Todo) {
     todoService.updateTodo(data);
+
+    return form.reset();
   }
 
   useEffect(() => {
@@ -87,6 +89,7 @@ function SingleItemForm() {
       "description": "",
       "completed": false,
     };
+
     if (!item) {
       return form.reset(defaultValues);
     }
@@ -96,13 +99,23 @@ function SingleItemForm() {
   }, [JSON.stringify(item)]);
 
   useEffect(() => {
+    const defaultValues: Todo = {
+      "title": "",
+      "description": "",
+      "completed": false,
+    };
+
+    if (!editingId) {
+      return form.reset(defaultValues);
+    }
     if (!editingId) {
       return;
     }
-    const t = todoService.getOne(editingId);
-    if (!t) {
-      setitem(undefined);
-    }
+    todoService.getOne(editingId).then(item => {
+      if (item) {
+        setitem(item);
+      }
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingId]);
@@ -159,7 +172,7 @@ export default function App() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Todo List</h1>
-      {<SingleItemForm />}
+      <SingleItemForm />
       <TodoList />
     </div>
   );
