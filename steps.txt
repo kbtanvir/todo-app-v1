@@ -7,10 +7,10 @@ CLIENT
 - and hook form for validation
 - connect handlers with APIs
 - test
+- move hanlders to state manager
 
 Todo
 -----
-- move hanlders to state manager
 - add loaders
 - make ui responsive
 - split code
