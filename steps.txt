@@ -8,15 +8,15 @@ CLIENT
 - connect handlers with APIs
 - test
 - move hanlders to state manager
+- add icons
+- make ui responsive
+- add transitions effects
 
 Todo
 -----
 - add loaders
-- make ui responsive
-- split code
-- add icons
-- add transitions effects
 - add secrets in env file, add env in git ignore
+- split code
 - deploy to vercel
 
 
