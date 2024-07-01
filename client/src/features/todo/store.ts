@@ -20,6 +20,24 @@ export const useProvider = () => useStore<IStore>(provider);
 // -----------------------
 
 export class TodoService {
+  async getOne(editingId: number | undefined): Promise<Todo | undefined> {
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/todos/${editingId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
   async fetchTodos() {
     try {
       const response = await fetch("http://127.0.0.1:5000/todos", {
@@ -52,13 +70,18 @@ export class TodoService {
   }
 
   async updateTodo(todo: Todo) {
-    await fetch(`http://127.0.0.1:5000/todos/${todo.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(todo),
-    });
+    if (todo.id) {
+      await fetch(`http://127.0.0.1:5000/todos/${todo.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(todo),
+      });
+    } else {
+      await this.addTodo(todo);
+    }
+
     provider.setEditingId(undefined);
 
     this.fetchTodos();

@@ -1,18 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FormErrorMessage } from "./components/FormMessage";
 import { Todo, todoSchema } from "./features/todo/model";
 import { provider, todoService, useProvider } from "./features/todo/store";
 
 function ListItem({ todo }: { todo: Todo }) {
-  const { editingId } = useProvider();
   return (
     <div
       key={todo.id}
       className="bg-white text-black shadow-md rounded-md p-4 mb-4 flex justify-between items-center"
     >
-      {editingId && <SingleItemForm item={todo} />}
       <div>
         <h2 className="text-xl font-bold">{todo.title}</h2>
         <p>{todo.description}</p>
@@ -65,30 +63,49 @@ function TodoList() {
   return (
     <div className="mt-4">
       {list.map(todo => (
-        <ListItem todo={todo} />
+        <ListItem key={todo.id} todo={todo} />
       ))}
     </div>
   );
 }
 
-function SingleItemForm({ item }: { item?: Todo }) {
+function SingleItemForm() {
+  const [item, setitem] = useState<Todo | undefined>(undefined);
+  const { editingId } = useProvider();
+
   const form = useForm<Todo>({
     resolver: zodResolver(todoSchema),
   });
 
   function onSubmit(data: Todo) {
     todoService.updateTodo(data);
-    
   }
 
   useEffect(() => {
+    const defaultValues: Todo = {
+      "title": "",
+      "description": "",
+      "completed": false,
+    };
     if (!item) {
-      return form.reset({});
+      return form.reset(defaultValues);
     }
 
     form.reset(item);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(item)]);
+
+  useEffect(() => {
+    if (!editingId) {
+      return;
+    }
+    const t = todoService.getOne(editingId);
+    if (!t) {
+      setitem(undefined);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingId]);
 
   return (
     <div className="bg-white shadow-md rounded-md p-4 mb-4">
@@ -129,7 +146,7 @@ function SingleItemForm({ item }: { item?: Todo }) {
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-md"
             >
-              {item!.id ? "Update" : "Add"}
+              {item?.id ? "Update" : "Add"}
             </button>
           </div>
         </form>
@@ -142,7 +159,7 @@ export default function App() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Todo List</h1>
-
+      {<SingleItemForm />}
       <TodoList />
     </div>
   );
