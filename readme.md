@@ -13,24 +13,29 @@ Make sure you have the following installed:
 ```bash
 git clone <repository_url>
 cd <repository_directory>
-Directory Structure
+```
+
+### Directory Structure
+
 Ensure your directory structure looks like this:
 
-scss
-Copy code
+```
 todo-app/
 ├── client/
 │   ├── Dockerfile
-│   └── (other client app files)
+│   ├── src
+         └── App.tsx
 ├── server/
 │   ├── Dockerfile
-│   └── (other server app files)
+│   └── app.py
 └── docker-compose.yml
-Docker Compose Configuration
-Create a docker-compose.yml file in the root directory (todo-app/) with the following content:
+```
 
-yaml
-Copy code
+### Docker Compose Configuration
+
+Create a `docker-compose.yml` file in the root directory (`todo-app/`) with the following content:
+
+```yaml
 version: "3.8"
 
 services:
@@ -51,25 +56,47 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
-Building and Running the Application
-Build and Run Docker Compose:
+```
 
-From the root directory (todo-app/), run the following command to build and start the services defined in docker-compose.yml:
+### Building and Running the Application
 
-bash
-Copy code
-docker-compose up --build
-This command will build the Docker images for the client and server apps defined in their respective Dockerfiles and start containers for both services.
+1. **Build and Run Docker Compose:**
 
-Accessing the Applications:
+   From the root directory (`todo-app/`), run the following command to build and start the services defined in `docker-compose.yml`:
 
-Client App: Access the React client app in your browser at http://localhost:3000.
+   ```bash
+   docker-compose up --build
+   ```
 
-Server App: The Flask server app with SQLAlchemy will be accessible at http://localhost:5000.
+   This command will build the Docker images for the client and server apps defined in their respective `Dockerfile`s and start containers for both services.
 
-Swagger Documentation:
+2. **Accessing the Applications:**
 
-Swagger UI: After starting the server, you can access the Swagger UI to view the API documentation at http://localhost:5000/apidocs.
+   - **Client App:** Access the React client app in your browser at [http://localhost:3000](http://localhost:3000).
+   
+   - **Server App:** The Flask server app with SQLAlchemy will be accessible at [http://localhost:5000](http://localhost:5000).
 
-Stopping the Application
-To stop the Docker containers running the applications, press Ctrl + C in the terminal where docker-compose up is running. This will stop the containers gracefully.
+3. **Swagger Documentation:**
+
+   - **Swagger UI:** After starting the server, you can access the Swagger UI to view the API documentation at [http://localhost:5000/apidocs](http://localhost:5000/apidocs).
+
+### Stopping the Application
+
+To stop the Docker containers running the applications, press `Ctrl + C` in the terminal where `docker-compose up` is running. This will stop the containers gracefully.
+
+### Tech Stack
+
+Backend:
+
+Flask
+SQLAlchemy
+
+Frontend:
+
+React with Vite
+Tailwind CSS
+
+DevOps:
+
+Docker
+Docker Compose
