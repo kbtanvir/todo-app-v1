@@ -84,6 +84,19 @@ services:
 
 To stop the Docker containers running the applications, press `Ctrl + C` in the terminal where `docker-compose up` is running. This will stop the containers gracefully.
 
----
+### Tech Stack
 
-This format ensures that each section is clearly separated and easy to follow, making it straightforward for users to install, run, and access your Todo application locally using Docker Compose.
+Backend:
+
+Flask
+SQLAlchemy
+
+Frontend:
+
+React with Vite
+Tailwind CSS
+
+DevOps:
+
+Docker
+Docker Compose
