@@ -6,7 +6,7 @@ export function FormErrorMessage({ name }: { name: string }) {
   return (
     <>
       {formService.formState.errors?.[name] && (
-        <p className="text-sm text-red-500">
+        <p className="text-sm text-red-500 pt-2">
           {formService.formState.errors[name]?.message as string}
         </p>
       )}

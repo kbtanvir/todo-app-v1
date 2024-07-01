@@ -15,6 +15,7 @@ COPY . .
 RUN pnpm run build
 
 # Step 2: Serve the built app with a lightweight web server
+
 FROM nginx:alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html

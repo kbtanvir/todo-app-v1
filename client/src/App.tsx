@@ -1,24 +1,27 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { FaCheck } from "react-icons/fa";
+import { MdModeEditOutline, MdOutlineDeleteOutline } from "react-icons/md";
+import { twMerge } from "tailwind-merge";
 import { FormErrorMessage } from "./components/FormMessage";
 import { Todo, todoSchema } from "./features/todo/model";
 import { provider, todoService, useProvider } from "./features/todo/store";
-
 function ListItem({ todo }: { todo: Todo }) {
   return (
     <div
       key={todo.id}
-      className="bg-white text-black shadow-md rounded-md p-4 mb-4 flex justify-between items-center"
+      className={twMerge(
+        ` text-black shadow-md rounded-md py-4 px-4 mb-4 flex justify-between items-center hover:shadow-xl transition ease-in-out  duration-300`,
+        todo.completed ? "bg-purple-200" : "bg-white"
+      )}
     >
-      <div>
-        <h2 className="text-xl font-bold">{todo.title}</h2>
-        <p>{todo.description}</p>
+      <div className="flex gap-5">
         <div>
           <label className="inline-flex items-center mt-3">
             <input
               type="checkbox"
-              className="form-checkbox h-5 w-5 text-gray-600"
+              className="h-5 w-5"
               checked={todo.completed}
               onChange={() =>
                 todoService.updateTodo({
@@ -27,22 +30,27 @@ function ListItem({ todo }: { todo: Todo }) {
                 })
               }
             />
-            <span className="ml-2 text-gray-700">Completed</span>
           </label>
         </div>
+        <div
+          className={twMerge(`grid`, todo.completed && "[&>p]:line-through")}
+        >
+          <p className="text-lg font-semibold">{todo.title}</p>
+          <p className="text-sm">{todo.description}</p>
+        </div>
       </div>
-      <div>
+      <div className="flex gap-2 ">
         <button
           onClick={() => provider.setEditingId(todo.id)}
-          className="bg-yellow-500 text-white px-4 py-2 rounded-md mr-2"
+          className="bg-yellow-500 text-black size-10 rounded-full hover:bg-yellow-400 hover:text-black transition-colors ease-in-out  duration-300"
         >
-          Edit
+          <MdModeEditOutline className="text-lg relative right-2" />
         </button>
         <button
           onClick={() => todoService.deleteTodo(todo.id)}
-          className="bg-red-500 text-white px-4 py-2 rounded-md"
+          className="bg-red-500 text-black size-10  rounded-full hover:bg-red-400 hover:text-black transition-colors ease-in-out  duration-300"
         >
-          Delete
+          <MdOutlineDeleteOutline className="text-lg  relative right-2" />
         </button>
       </div>
     </div>
@@ -68,7 +76,11 @@ function TodoList() {
     </div>
   );
 }
-
+const defaultValues: Todo = {
+  "title": "",
+  "description": "",
+  "completed": false,
+};
 function SingleItemForm() {
   const [item, setitem] = useState<Todo | undefined>(undefined);
   const { editingId } = useProvider();
@@ -84,12 +96,6 @@ function SingleItemForm() {
   }
 
   useEffect(() => {
-    const defaultValues: Todo = {
-      "title": "",
-      "description": "",
-      "completed": false,
-    };
-
     if (!item) {
       return form.reset(defaultValues);
     }
@@ -99,18 +105,10 @@ function SingleItemForm() {
   }, [JSON.stringify(item)]);
 
   useEffect(() => {
-    const defaultValues: Todo = {
-      "title": "",
-      "description": "",
-      "completed": false,
-    };
-
     if (!editingId) {
       return form.reset(defaultValues);
     }
-    if (!editingId) {
-      return;
-    }
+
     todoService.getOne(editingId).then(item => {
       if (item) {
         setitem(item);
@@ -121,11 +119,11 @@ function SingleItemForm() {
   }, [editingId]);
 
   return (
-    <div className="bg-white shadow-md rounded-md p-4 mb-4">
+    <div className="bg-white shadow-md rounded-md p-4 mb-4 ">
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label className="block text-gray-700">Title</label>
+            <label className="block text-gray-700 mb-2">Title</label>
             <input
               type="text"
               {...form.register("title")}
@@ -135,7 +133,7 @@ function SingleItemForm() {
             <FormErrorMessage name={"title"} />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Description</label>
+            <label className="block text-gray-700  mb-2">Description</label>
             <textarea
               {...form.register("description")}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -143,7 +141,7 @@ function SingleItemForm() {
 
             <FormErrorMessage name={"description"} />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="inline-flex items-center">
               <input
                 type="checkbox"
@@ -153,13 +151,13 @@ function SingleItemForm() {
 
               <span className="ml-2 text-gray-700">Completed</span>
             </label>
-          </div>
+          </div> */}
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              className="bg-emerald-500 text-black size-10 rounded-full hover:bg-emerald-400 hover:text-black transition-colors ease-in-out  duration-300"
             >
-              {item?.id ? "Update" : "Add"}
+              <FaCheck className="text-lg relative right-2" />
             </button>
           </div>
         </form>
@@ -170,10 +168,12 @@ function SingleItemForm() {
 
 export default function App() {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Todo List</h1>
-      <SingleItemForm />
-      <TodoList />
+    <div className=" p-4  min-h-[100vh] w-full bg-purple-200">
+      <div className="container mx-auto max-w-[500px]">
+        <h1 className="text-2xl font-bold mb-4">Todo List</h1>
+        <SingleItemForm />
+        <TodoList />
+      </div>
     </div>
   );
 }
