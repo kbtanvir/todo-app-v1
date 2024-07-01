@@ -16,7 +16,7 @@ export const provider = createStore(initialState);
 
 export const useProvider = () => useStore<IStore>(provider);
 
-// REPO SERVICE CONFIG
+// SERVICE CONFIG
 // -----------------------
 
 export class TodoService {
@@ -59,6 +59,7 @@ export class TodoService {
       },
       body: JSON.stringify(todo),
     });
+    provider.setEditingId(undefined);
 
     this.fetchTodos();
   }
