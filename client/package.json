@@ -13,7 +13,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.0",
-    
+    "@poly-state/poly-state": "^1.1.4",
+    "@poly-state/react": "^3.0.0",
     "@hookform/resolvers": "^3.6.0",
     "zod": "^3.23.8"
   },

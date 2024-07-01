@@ -11,8 +11,7 @@ CLIENT
 Todo
 -----
 - move hanlders to state manager
-- add react query for request state handling
-- add loaders 
+- add loaders
 - make ui responsive
 - split code
 - add icons

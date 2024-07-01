@@ -258,6 +258,7 @@ def delete_todo(id):
 if __name__ == '__main__':
 
     with app.app_context():  # must run flask app inside app context to ensure sql alchemy is working properly
-        cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5174"}})
+        cors = CORS(app )
+        # cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5174"}})
         db.create_all()
         app.run(debug=True)
