@@ -74,7 +74,7 @@ services:
 
    This command will build the Docker images for the client and server apps defined in their respective `Dockerfile`s and start containers for both services.
 
-2. **Accessing the Applications:**
+2. **Accessing the Applications in local machine:**
 
    - **Client App:** Access the React client app in your browser at [http://localhost:3000](http://localhost:3000).
 
@@ -83,6 +83,14 @@ services:
 3. **Swagger Documentation:**
 
    - **Swagger UI:** After starting the server, you can access the Swagger UI to view the API documentation at [http://localhost:5000/apidocs](http://localhost:5000/apidocs).
+
+4. **Live urls:**
+
+   - **Client App:**
+     https://todo-app-client-coral.vercel.app/
+
+   - **API Docs:**
+     https://todo-app-server-kappa.vercel.app/
 
 ### Stopping the Application
 
@@ -94,6 +102,8 @@ Backend:
 
 Flask
 SQLAlchemy
+posgress - live
+sqlite - local
 
 Frontend:
 
