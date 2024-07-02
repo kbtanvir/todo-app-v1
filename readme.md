@@ -87,10 +87,10 @@ services:
 4. **Live urls:**
 
    - **Client App:**
-    [https://todo-app-client-coral.vercel.app/] (https://todo-app-client-coral.vercel.app/)
+    [https://todo-app-client-coral.vercel.app/](https://todo-app-client-coral.vercel.app/)
 
    - **API Docs:**
-     [https://todo-app-server-kappa.vercel.app/](https://todo-app-server-kappa.vercel.app/)
+    [https://todo-app-server-kappa.vercel.app/](https://todo-app-server-kappa.vercel.app/)
 
 ### Stopping the Application
 
