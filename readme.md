@@ -10,8 +10,8 @@ Make sure you have the following installed:
 ### Clone the Repository
 
 ```bash
-git clone <repository_url>
-cd <repository_directory>
+git clone [<[repository_url]()>](https://github.com/kbtanvir/todo-app-v1.git)
+cd todo-app-v1
 ```
 
 ### Directory Structure
