@@ -35,33 +35,6 @@ todo-app/
 └── compose.yml
 ```
 
-### Docker Compose Configuration
-
-Create a `docker-compose.yml` file in the root directory (`todo-app/`) with the following content:
-
-```yaml
-version: "3.8"
-
-services:
-  client:
-    container_name: todo-app-client
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "3000:80"
-    depends_on:
-      - server
-
-  server:
-    container_name: todo-app-server
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-```
-
 ### Building and Running the Application
 
 1. **Build and Run Docker Compose:**
