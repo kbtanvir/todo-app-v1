@@ -25,7 +25,7 @@ export class TodoService {
       console.error("Fetch error:", error);
     }
   }
-  async fetchTodos() {
+  async fetchTodos(): Promise<Todo[] | void> {
     provider.setEditingId(undefined);
     try {
       const response = await fetch(
@@ -41,6 +41,7 @@ export class TodoService {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
+      console.log(data);
       provider.setList(data);
     } catch (error) {
       console.error("Fetch error:", error);
@@ -72,7 +73,7 @@ export class TodoService {
       await this.addTodo(todo);
     }
 
-    this.fetchTodos();
+    await this.fetchTodos();
   }
 
   async setStatus(id: number, completed: boolean) {
@@ -104,7 +105,7 @@ export class TodoService {
     await fetch(`${import.meta.env.VITE_BACKEND_URL}/todos/${id}`, {
       method: "DELETE",
     });
-    this.fetchTodos();
+    await this.fetchTodos();
   }
 }
 

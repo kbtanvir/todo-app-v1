@@ -33,15 +33,15 @@ migrate = Migrate(app, db)
 swagger = Swagger(app)
 
 # CORS Configuration
-CORS(app, resources={r"/*": {"origins": os.getenv('CLIENT_URI')}})
-# CORS(app)
+# CORS(app, resources={r"/*": {"origins": os.getenv('CLIENT_URI')}})
+CORS(app)
 
 # Rate Limiting
 
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["200 per day", "100 per hour"]
+    default_limits=["2000 per day", "1000 per hour"]
 )
 
 # Model
@@ -94,7 +94,7 @@ def helloWorld():
 
 
 @app.route('/todos', methods=['GET'])
-@limiter.limit("10 per minute")
+# @limiter.limit("10 per minute")
 def get_todos():
     """
     Get all todos
@@ -121,7 +121,7 @@ def get_todos():
           completed:
             type: boolean
     """
-    data = Todo.query.order_by(Todo.id.desc()).all()
+    data = Todo.query.all()
     result = todos_schema.dump(data)
     return jsonify(result)
 

@@ -3,13 +3,17 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FaCheck } from "react-icons/fa";
 import { MdModeEditOutline, MdOutlineDeleteOutline } from "react-icons/md";
+import Skeleton from "react-loading-skeleton";
+import { useQuery } from "react-query";
 import { twMerge } from "tailwind-merge";
 import { FormErrorMessage } from "./components/FormMessage";
+import { Spinner } from "./components/Spinner";
 import { Todo, todoSchema } from "./features/todo/model";
 import { provider, useProvider } from "./features/todo/provider";
 import { todoService } from "./features/todo/repo";
 
 function ListItem({ todo }: { todo: Todo }) {
+  const [isDeleting, setIsDeleting] = useState(false);
   return (
     <div
       key={todo.id}
@@ -52,12 +56,21 @@ function ListItem({ todo }: { todo: Todo }) {
         </button>
         <button
           className={twMerge(
-            `bg-rose-200 text-black size-[42px]  rounded-[50%] hover:bg-rose-300 transition-colors ease-in-out  duration-300 max-[400px]:size-[30px] p-0 flex items-center justify-center`,
+            `bg-rose-200 text-black size-[42px]  rounded-[50%] hover:bg-rose-300 transition-colors ease-in-out  duration-300 max-[400px]:size-[30px] p-0 flex items-center justify-center disabled:bg-gray-100`,
             todo.completed && "bg-white hover:bg-gray-100"
           )}
-          onClick={() => todoService.deleteTodo(todo.id)}
+          onClick={async () => {
+            setIsDeleting(true);
+            await todoService.deleteTodo(todo.id);
+            setIsDeleting(false);
+          }}
+          disabled={isDeleting}
         >
-          <MdOutlineDeleteOutline className="text-lg  relative  " />
+          {isDeleting ? (
+            <Spinner />
+          ) : (
+            <MdOutlineDeleteOutline className="text-lg  relative  " />
+          )}
         </button>
       </div>
     </div>
@@ -65,11 +78,22 @@ function ListItem({ todo }: { todo: Todo }) {
 }
 
 function TodoList() {
+  // Queries
+
   const { list } = useProvider();
 
-  useEffect(() => {
-    todoService.fetchTodos();
-  }, []);
+  const query = useQuery("todos", todoService.fetchTodos);
+
+  if (query.isLoading) {
+    return (
+      <Skeleton
+        className="mb-[16px]"
+        count={3}
+        height={82}
+        baseColor="white"
+      />
+    );
+  }
 
   if (!list.length) {
     return <>No todos</>;
@@ -96,6 +120,7 @@ function SingleItemForm() {
 
   const [item, setitem] = useState<Todo | undefined>(undefined);
   const { editingId } = useProvider();
+  const [loading, setIsLoading] = useState(false);
 
   // FORM CONFIG
   //-------------
@@ -104,8 +129,11 @@ function SingleItemForm() {
     resolver: zodResolver(todoSchema),
   });
 
-  function onSubmit(data: Todo) {
-    todoService.updateTodo(data).then(() => form.reset(defaultValues));
+  async function onSubmit(data: Todo) {
+    setIsLoading(true);
+    await todoService.updateTodo(data);
+    form.reset(defaultValues);
+    setIsLoading(false);
   }
 
   // SIDE EFFECTS
@@ -165,9 +193,14 @@ function SingleItemForm() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-purple-200 text-black size-[42px] rounded-[50%] hover:bg-purple-300 hover:text-black transition  ease-in-out  duration-300 max-[400px]:size-[30px] p-0 flex items-center justify-center"
+              disabled={loading}
+              className="bg-purple-200 text-black size-[42px] rounded-[50%] hover:bg-purple-300 hover:text-black transition  ease-in-out  duration-300 max-[400px]:size-[30px] p-0 flex items-center justify-center disabled:bg-gray-100"
             >
-              <FaCheck className="text-md relative  " />
+              {loading ? (
+                <Spinner />
+              ) : (
+                <FaCheck className="text-md relative  " />
+              )}
             </button>
           </div>
         </form>
