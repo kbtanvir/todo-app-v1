@@ -120,6 +120,6 @@ input[type="checkbox"]:disabled {
 @layer base {
   input,
   textarea {
-    @apply focus:bg-white bg-white active:bg-white;
+    @apply focus:bg-white bg-white active:bg-white max-[400px]:text-sm;
   }
 }

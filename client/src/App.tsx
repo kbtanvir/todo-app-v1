@@ -12,11 +12,11 @@ function ListItem({ todo }: { todo: Todo }) {
     <div
       key={todo.id}
       className={twMerge(
-        ` text-black shadow-md rounded-md py-4 px-4 mb-4 flex justify-between items-center hover:shadow-xl transition ease-in-out  duration-300 gap-10`,
+        ` text-black shadow-md rounded-md py-4 px-4 mb-4 flex justify-between items-center hover:shadow-xl transition ease-in-out  duration-300 gap-5 max-[400px]:grid max-[400px]:gap-3 w-full max-[400px]:justify-stretch`,
         todo.completed ? "bg-purple-200" : "bg-white"
       )}
     >
-      <div className="flex gap-5">
+      <div className="flex gap-5 ">
         <div className="inline-flex items-center mt-2 self-start">
           <input
             type="checkbox"
@@ -32,30 +32,30 @@ function ListItem({ todo }: { todo: Todo }) {
         <div
           className={twMerge(`grid`, todo.completed && "[&>p]:line-through")}
         >
-          <p className="text-lg text-gray-700 font-semibold pb-1">
+          <p className="text-lg text-gray-700 font-semibold pb-1 max-[400px]:text-sm">
             {todo.title}
           </p>
           <p className="text-[12px] text-gray-500">{todo.description}</p>
         </div>
       </div>
-      <div className="flex gap-2 self-start mt-1">
+      <div className="flex gap-2 self-start mt-1  max-[400px]:justify-end">
         <button
           onClick={() => provider.setEditingId(todo.id)}
           className={twMerge(
-            `bg-purple-200 text-black size-[42px]  rounded-[50%] hover:bg-purple-300 hover:text-black transition-colors ease-in-out  duration-300 `,
+            `bg-purple-200 text-black size-[42px]  rounded-[50%] hover:bg-purple-300 hover:text-black transition-colors ease-in-out  duration-300 max-[400px]:size-[30px] p-0 flex items-center justify-center`,
             todo.completed && "bg-white hover:bg-gray-100"
           )}
         >
-          <MdModeEditOutline className="text-lg relative right-2" />
+          <MdModeEditOutline className="text-lg relative  max-[400px]:size-[15px]" />
         </button>
         <button
           className={twMerge(
-            `bg-rose-200 text-black size-[42px]  rounded-[50%] hover:bg-rose-300 hover:text-black transition-colors ease-in-out  duration-300`,
+            `bg-rose-200 text-black size-[42px]  rounded-[50%] hover:bg-rose-300 transition-colors ease-in-out  duration-300 max-[400px]:size-[30px] p-0 flex items-center justify-center`,
             todo.completed && "bg-white hover:bg-gray-100"
           )}
           onClick={() => todoService.deleteTodo(todo.id)}
         >
-          <MdOutlineDeleteOutline className="text-lg  relative right-2" />
+          <MdOutlineDeleteOutline className="text-lg  relative  " />
         </button>
       </div>
     </div>
@@ -152,9 +152,9 @@ function SingleItemForm() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-purple-200 text-black size-[42px] rounded-[50%] hover:bg-purple-300 hover:text-black transition-colors ease-in-out  duration-300"
+              className="bg-purple-200 text-black size-[42px] rounded-[50%] hover:bg-purple-300 hover:text-black transition  ease-in-out  duration-300 max-[400px]:size-[30px] p-0 flex items-center justify-center"
             >
-              <FaCheck className="text-md relative right-[7px]" />
+              <FaCheck className="text-md relative  " />
             </button>
           </div>
         </form>

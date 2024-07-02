@@ -3,9 +3,5 @@
 .dockerignore
 .gitignore
 .env
-config
-build
-node_modules
-docker-compose.yaml
+__pycache__
 Dockerfile
-README.md

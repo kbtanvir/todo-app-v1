@@ -1,25 +1,35 @@
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
-from flask import Flask, jsonify, request
-from sqlalchemy.orm import DeclarativeBase
 from flask_sqlalchemy import SQLAlchemy
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from marshmallow import Schema, fields, validate
 from flasgger import Swagger
 
 app = Flask(__name__)
 
-# SQLAlchemy config
+# Secure Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'your_secret_key'
 
-
-class Base(DeclarativeBase):
-    pass
-
-
-db = SQLAlchemy(model_class=Base)
+# Initialize extensions
+db = SQLAlchemy(app)
 ma = Marshmallow(app)
+migrate = Migrate(app, db)
 swagger = Swagger(app)
+
+# CORS Configuration
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
+# Rate Limiting
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "100 per hour"]
+)
 
 # Model
 
@@ -30,36 +40,48 @@ class Todo(db.Model):
     description = db.Column(db.String(200), nullable=False)
     completed = db.Column(db.Boolean, default=False)
 
-# JSON serialization
+# JSON Serialization
 
 
 class TodoSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Todo
 
+    id = fields.Int(dump_only=True)
+    title = fields.Str(required=True, validate=validate.Length(min=1, max=100))
+    description = fields.Str(required=True, validate=validate.Length(min=1, max=200))
+    completed = fields.Bool()
+
 
 todo_schema = TodoSchema()
 todos_schema = TodoSchema(many=True)
 
-db.init_app(app)
-migrate = Migrate(app, db)
+# Error Handling & Security
 
-# API routes configuration
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        'status': '404',
+        'error': 'Not found'
+    }), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({'status': 500, 'error': 'Internal server error'}), 500
+
+
+# API Routes
 
 
 @app.route("/")
 def helloWorld():
-    """
-    Default endpoint to greet the world.
-    ---
-    responses:
-      200:
-        description: A greeting message
-    """
     return jsonify("Hello, cross-origin-world!")
 
 
 @app.route('/todos', methods=['GET'])
+@limiter.limit("10 per minute")
 def get_todos():
     """
     Get all todos
@@ -86,12 +108,13 @@ def get_todos():
           completed:
             type: boolean
     """
-    data = Todo.query.all()
+    data = Todo.query.all()[::-1]
     result = todos_schema.dump(data)
     return jsonify(result)
 
 
 @app.route('/todos', methods=['POST'])
+@limiter.limit("100 per minute")
 def add_todo():
     """
     Add a new todo
@@ -152,6 +175,7 @@ def add_todo():
 
 
 @app.route('/todos/<int:id>', methods=['GET'])
+@limiter.limit("20 per minute")
 def get_todo(id):
     """
     Get one by ID
@@ -180,6 +204,7 @@ def get_todo(id):
 
 
 @app.route('/todos/<int:id>', methods=['PUT'])
+@limiter.limit("50 per minute")
 def update_todo(id):
     """
     Update a todo by ID
@@ -244,6 +269,7 @@ def update_todo(id):
 
 
 @app.route('/todos/<int:id>', methods=['DELETE'])
+@limiter.limit("100 per minute")
 def delete_todo(id):
     """
     Delete a todo by ID
@@ -279,6 +305,5 @@ def delete_todo(id):
 
 if __name__ == '__main__':
     with app.app_context():
-        cors = CORS(app)
         db.create_all()
         app.run(host='0.0.0.0', port=5000, debug=True)
