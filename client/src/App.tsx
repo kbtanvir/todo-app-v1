@@ -90,13 +90,13 @@ function SingleItemForm() {
   });
 
   function onSubmit(data: Todo) {
-    todoService.updateTodo(data);
-
-    return form.reset(defaultValues);
+    todoService.updateTodo(data).then(() => form.reset(defaultValues));
   }
 
   useEffect(() => {
-    if (!item) {
+    form.reset(defaultValues);
+
+    if (!item || item.id !== editingId) {
       return form.reset(defaultValues);
     }
 
@@ -106,10 +106,12 @@ function SingleItemForm() {
 
   useEffect(() => {
     if (!editingId) {
-      return form.reset(defaultValues);
+      form.reset(defaultValues);
+      return;
     }
 
     todoService.getOne(editingId).then(item => {
+      form.reset(item);
       if (item) {
         setitem(item);
       }
@@ -141,17 +143,7 @@ function SingleItemForm() {
 
             <FormErrorMessage name={"description"} />
           </div>
-          {/* <div className="mb-4">
-            <label className="inline-flex items-center">
-              <input
-                type="checkbox"
-                {...form.register("completed")}
-                className="form-checkbox h-5 w-5 "
-              />
 
-              <span className="ml-2 text-gray-700">Completed</span>
-            </label>
-          </div> */}
           <div className="flex justify-end">
             <button
               type="submit"
