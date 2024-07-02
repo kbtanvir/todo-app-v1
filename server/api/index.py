@@ -11,11 +11,13 @@ from flasgger import Swagger
 app = Flask(__name__)
 
 # Secure Configuration
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'
 
 # Initialize extensions
+
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 migrate = Migrate(app, db)
@@ -25,6 +27,7 @@ swagger = Swagger(app)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Rate Limiting
+
 limiter = Limiter(
     get_remote_address,
     app=app,

@@ -6,7 +6,9 @@ import { MdModeEditOutline, MdOutlineDeleteOutline } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 import { FormErrorMessage } from "./components/FormMessage";
 import { Todo, todoSchema } from "./features/todo/model";
-import { provider, todoService, useProvider } from "./features/todo/store";
+import { provider, useProvider } from "./features/todo/provider";
+import { todoService } from "./features/todo/repo";
+
 function ListItem({ todo }: { todo: Todo }) {
   return (
     <div
@@ -81,14 +83,22 @@ function TodoList() {
     </div>
   );
 }
+
 const defaultValues: Todo = {
   "title": "",
   "description": "",
   "completed": false,
 };
+
 function SingleItemForm() {
+  // STATES
+  //-------------
+
   const [item, setitem] = useState<Todo | undefined>(undefined);
   const { editingId } = useProvider();
+
+  // FORM CONFIG
+  //-------------
 
   const form = useForm<Todo>({
     resolver: zodResolver(todoSchema),
@@ -97,6 +107,9 @@ function SingleItemForm() {
   function onSubmit(data: Todo) {
     todoService.updateTodo(data).then(() => form.reset(defaultValues));
   }
+
+  // SIDE EFFECTS
+  //-------------
 
   useEffect(() => {
     form.reset(defaultValues);

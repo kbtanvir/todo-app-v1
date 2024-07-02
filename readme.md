@@ -1,10 +1,9 @@
- 
-
 ## Installation
 
 ### Prerequisites
 
 Make sure you have the following installed:
+
 - Docker
 - Docker Compose
 
@@ -25,10 +24,15 @@ todo-app/
 │   ├── Dockerfile
 │   ├── src
          └── App.tsx
+│   ├── features/todo
+         └── model.ts
+         └── provider.ts
+         └── repo.ts
 ├── server/
 │   ├── Dockerfile
-│   └── app.py
-└── docker-compose.yml
+│   ├── api
+         └── index.py
+└── compose.yml
 ```
 
 ### Docker Compose Configuration
@@ -73,7 +77,7 @@ services:
 2. **Accessing the Applications:**
 
    - **Client App:** Access the React client app in your browser at [http://localhost:3000](http://localhost:3000).
-   
+
    - **Server App:** The Flask server app with SQLAlchemy will be accessible at [http://localhost:5000](http://localhost:5000).
 
 3. **Swagger Documentation:**
@@ -95,6 +99,7 @@ Frontend:
 
 React with Vite
 Tailwind CSS
+Polystate
 
 DevOps:
 
