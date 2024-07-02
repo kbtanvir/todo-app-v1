@@ -12,43 +12,48 @@ function ListItem({ todo }: { todo: Todo }) {
     <div
       key={todo.id}
       className={twMerge(
-        ` text-black shadow-md rounded-md py-4 px-4 mb-4 flex justify-between items-center hover:shadow-xl transition ease-in-out  duration-300`,
+        ` text-black shadow-md rounded-md py-4 px-4 mb-4 flex justify-between items-center hover:shadow-xl transition ease-in-out  duration-300 gap-10`,
         todo.completed ? "bg-purple-200" : "bg-white"
       )}
     >
       <div className="flex gap-5">
-        <div>
-          <label className="inline-flex items-center mt-3">
-            <input
-              type="checkbox"
-              className="h-5 w-5"
-              checked={todo.completed}
-              onChange={() =>
-                todoService.updateTodo({
-                  ...todo,
-                  completed: !todo.completed,
-                })
-              }
-            />
-          </label>
+        <div className="inline-flex items-center mt-2 self-start">
+          <input
+            type="checkbox"
+            checked={todo.completed}
+            onChange={() =>
+              todoService.updateTodo({
+                ...todo,
+                completed: !todo.completed,
+              })
+            }
+          />
         </div>
         <div
           className={twMerge(`grid`, todo.completed && "[&>p]:line-through")}
         >
-          <p className="text-lg font-semibold">{todo.title}</p>
-          <p className="text-sm">{todo.description}</p>
+          <p className="text-lg text-gray-700 font-semibold pb-1">
+            {todo.title}
+          </p>
+          <p className="text-[12px] text-gray-500">{todo.description}</p>
         </div>
       </div>
-      <div className="flex gap-2 ">
+      <div className="flex gap-2 self-start mt-1">
         <button
           onClick={() => provider.setEditingId(todo.id)}
-          className="bg-yellow-500 text-black size-10 rounded-full hover:bg-yellow-400 hover:text-black transition-colors ease-in-out  duration-300"
+          className={twMerge(
+            `bg-purple-200 text-black size-[42px]  rounded-[50%] hover:bg-purple-300 hover:text-black transition-colors ease-in-out  duration-300 `,
+            todo.completed && "bg-white hover:bg-gray-100"
+          )}
         >
           <MdModeEditOutline className="text-lg relative right-2" />
         </button>
         <button
+          className={twMerge(
+            `bg-rose-200 text-black size-[42px]  rounded-[50%] hover:bg-rose-300 hover:text-black transition-colors ease-in-out  duration-300`,
+            todo.completed && "bg-white hover:bg-gray-100"
+          )}
           onClick={() => todoService.deleteTodo(todo.id)}
-          className="bg-red-500 text-black size-10  rounded-full hover:bg-red-400 hover:text-black transition-colors ease-in-out  duration-300"
         >
           <MdOutlineDeleteOutline className="text-lg  relative right-2" />
         </button>
@@ -147,9 +152,9 @@ function SingleItemForm() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-emerald-500 text-black size-10 rounded-full hover:bg-emerald-400 hover:text-black transition-colors ease-in-out  duration-300"
+              className="bg-purple-200 text-black size-[42px] rounded-[50%] hover:bg-purple-300 hover:text-black transition-colors ease-in-out  duration-300"
             >
-              <FaCheck className="text-lg relative right-2" />
+              <FaCheck className="text-md relative right-[7px]" />
             </button>
           </div>
         </form>
