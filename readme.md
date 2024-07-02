@@ -73,16 +73,16 @@ To stop the Docker containers running the applications, press `Ctrl + C` in the 
 
 Backend:
 
-Flask
-SQLAlchemy
-posgress - live
-sqlite - local
+ - Flask
+ - SQLAlchemy
+ - Posgress - live
+ - Sqlite - local
 
 Frontend:
 
-React with Vite
-Tailwind CSS
-Polystate
+ - React with Vite
+ - Tailwind CSS
+ - Polystate
 
 DevOps:
 
