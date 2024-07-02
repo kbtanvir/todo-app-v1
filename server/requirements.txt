@@ -41,6 +41,7 @@ mistune==3.0.2
 ordered-set==4.1.0
 orjson==3.10.5
 packaging==24.1
+psycopg2-binary==2.9.9
 pydantic==2.8.0
 pydantic_core==2.20.0
 Pygments==2.18.0

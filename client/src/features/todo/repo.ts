@@ -7,12 +7,15 @@ import { provider } from "./provider";
 export class TodoService {
   async getOne(editingId: number | undefined): Promise<Todo | undefined> {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/todos/${editingId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/todos/${editingId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -25,12 +28,15 @@ export class TodoService {
   async fetchTodos() {
     provider.setEditingId(undefined);
     try {
-      const response = await fetch("http://127.0.0.1:5000/todos", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/todos`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -42,7 +48,7 @@ export class TodoService {
   }
 
   async addTodo(todo: Todo) {
-    await fetch("http://127.0.0.1:5000/todos", {
+    await fetch(`${import.meta.env.VITE_BACKEND_URL}/todos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +61,7 @@ export class TodoService {
 
   async updateTodo(todo: Todo) {
     if (todo.id) {
-      await fetch(`http://127.0.0.1:5000/todos/${todo.id}`, {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/todos/${todo.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +77,9 @@ export class TodoService {
 
   async setStatus(id: number, completed: boolean) {
     // Fetch the current todo item
-    const response = await fetch(`http://127.0.0.1:5000/todos/${id}`);
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/todos/${id}`
+    );
 
     const todo: Todo = await response.json();
 
@@ -80,7 +88,7 @@ export class TodoService {
     todo.completed = completed;
 
     // Send the updated todo item back to the server
-    await fetch(`http://127.0.0.1:5000/todos/${id}`, {
+    await fetch(`${import.meta.env.VITE_BACKEND_URL}/todos/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -93,7 +101,7 @@ export class TodoService {
   }
 
   async deleteTodo(id: Todo["id"]) {
-    await fetch(`http://127.0.0.1:5000/todos/${id}`, {
+    await fetch(`${import.meta.env.VITE_BACKEND_URL}/todos/${id}`, {
       method: "DELETE",
     });
     this.fetchTodos();

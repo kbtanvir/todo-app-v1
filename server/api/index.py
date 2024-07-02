@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
@@ -7,12 +8,20 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from marshmallow import Schema, fields, validate
 from flasgger import Swagger
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
 # Secure Configuration
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main.db'
+uri = os.getenv("DB_URI")  # or other relevant config var
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'
 
@@ -24,7 +33,8 @@ migrate = Migrate(app, db)
 swagger = Swagger(app)
 
 # CORS Configuration
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/*": {"origins": os.getenv('CLIENT_URI')}})
+# CORS(app)
 
 # Rate Limiting
 
@@ -111,7 +121,7 @@ def get_todos():
           completed:
             type: boolean
     """
-    data = Todo.query.all()[::-1]
+    data = Todo.query.order_by(Todo.id.desc()).all()
     result = todos_schema.dump(data)
     return jsonify(result)
 
@@ -178,7 +188,7 @@ def add_todo():
 
 
 @app.route('/todos/<int:id>', methods=['GET'])
-@limiter.limit("20 per minute")
+@limiter.limit("100 per minute")
 def get_todo(id):
     """
     Get one by ID
