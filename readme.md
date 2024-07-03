@@ -1,3 +1,8 @@
+## Preview 
+
+![image](https://github.com/kbtanvir/todo-app-v1/assets/52887114/841c0118-0532-439f-9118-bb47dddc4769)
+
+
 ## Installation
 
 ### Prerequisites
@@ -75,8 +80,9 @@ Backend:
 
  - Flask
  - SQLAlchemy
- - Posgress - live
- - Sqlite - local
+ - Postgress - Live
+ - Sqlite - Local
+ - NGINX
 
 Frontend:
 
