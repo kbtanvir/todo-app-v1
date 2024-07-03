@@ -77,7 +77,7 @@ To stop the Docker containers running the applications, press `Ctrl + C` in the 
 ### Tech Stack
 
 Backend:
-
+ - Python
  - Flask
  - SQLAlchemy
  - Postgress - Live
@@ -85,12 +85,12 @@ Backend:
  - NGINX
 
 Frontend:
-
+ - TypeScript
  - React with Vite
  - Tailwind CSS
  - Polystate
+ - Docker
+ - Docker Compose
 
-DevOps:
 
-Docker
-Docker Compose
+
