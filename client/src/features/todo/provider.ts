@@ -12,6 +12,6 @@ export const initialState = {
 
 export type IStore = typeof initialState;
 
-export const provider = createStore(initialState);
+export const todoProvider = createStore(initialState);
 
-export const useProvider = () => useStore<IStore>(provider);
+export const useTodoProvider = () => useStore<IStore>(todoProvider);

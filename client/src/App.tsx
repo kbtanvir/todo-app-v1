@@ -4,10 +4,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import { FaCheck } from "react-icons/fa";
 import { MdModeEditOutline, MdOutlineDeleteOutline } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
+import { persistStore } from "./common/persist";
 import { FormErrorMessage } from "./components/FormMessage";
 import { Todo, todoSchema } from "./features/todo/model";
-import { provider, useProvider } from "./features/todo/provider";
+import { todoProvider, useTodoProvider } from "./features/todo/provider";
 import { todoService } from "./features/todo/repo";
+
+persistStore(todoProvider, "TODOS");
 
 function ListItem({ todo }: { todo: Todo }) {
   return (
@@ -42,7 +45,7 @@ function ListItem({ todo }: { todo: Todo }) {
       </div>
       <div className="flex gap-2 self-start mt-1  max-[400px]:justify-end">
         <button
-          onClick={() => provider.setEditingId(todo.id)}
+          onClick={() => todoProvider.setEditingId(todo.id)}
           className={twMerge(
             `bg-purple-200 text-black size-[42px]  rounded-[50%] hover:bg-purple-300 hover:text-black transition-colors ease-in-out  duration-300 max-[400px]:size-[30px] p-0 flex items-center justify-center`,
             todo.completed && "bg-white hover:bg-gray-100"
@@ -65,7 +68,7 @@ function ListItem({ todo }: { todo: Todo }) {
 }
 
 function TodoList() {
-  const { list } = useProvider();
+  const { list } = useTodoProvider();
 
   useEffect(() => {
     todoService.fetchTodos();
@@ -95,7 +98,7 @@ function SingleItemForm() {
   //-------------
 
   const [item, setitem] = useState<Todo | undefined>(undefined);
-  const { editingId } = useProvider();
+  const { editingId } = useTodoProvider();
 
   // FORM CONFIG
   //-------------
