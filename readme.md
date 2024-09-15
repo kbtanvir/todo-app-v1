@@ -88,7 +88,8 @@ Frontend:
  - TypeScript
  - React with Vite
  - Tailwind CSS
- - Polystate
+ - [Polystate](https://poly-state.github.io/) - State manager
+ - [Zod](https://zod.dev/) - Validation
  - Docker
  - Docker Compose
 
